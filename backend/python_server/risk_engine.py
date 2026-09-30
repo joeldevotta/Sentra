@@ -28,6 +28,47 @@ SHORTENERS = {
 }
 
 
+TRUSTED_UPI_HANDLES = {"upi", "fam"}
+KNOWN_BRANDS = {
+    "youtube.com": "YouTube",
+    "google.com": "Google",
+    "amazon.in": "Amazon",
+    "flipkart.com": "Flipkart",
+    "paytm.com": "Paytm",
+    "phonepe.com": "PhonePe",
+    "gpay.app": "Google Pay",
+}
+
+
+def _edit_distance(a: str, b: str) -> int:
+    prev = list(range(len(b) + 1))
+    for i, ca in enumerate(a, 1):
+        cur = [i]
+        for j, cb in enumerate(b, 1):
+            cur.append(min(cur[-1] + 1, prev[j] + 1, prev[j - 1] + (ca != cb)))
+        prev = cur
+    return prev[-1]
+
+
+def analyze_upi(recipient: str) -> tuple[int, list[str]]:
+    value = recipient.strip().lower()
+    if "@" not in value:
+        return 0, []
+
+    user, handle = value.rsplit("@", 1)
+    if not user or not handle:
+        return 12, ["Malformed UPI ID"]
+
+    if handle in TRUSTED_UPI_HANDLES:
+        return 0, [f"Recognized UPI handle: @{handle}"]
+
+    # A valid-looking handle is not automatically safe, but an unfamiliar one deserves review.
+    if re.fullmatch(r"[a-z0-9._-]+", handle):
+        return 5, ["Unrecognized UPI handle"]
+
+    return 12, ["Suspicious UPI handle format"]
+
+
 def _contains_any(text: str, terms: list[str]) -> str | None:
     for term in terms:
         if term in text:
@@ -46,6 +87,18 @@ def analyze_url(link: str) -> tuple[int, list[str]]:
     try:
         parsed = urlparse(value if "://" in value else f"https://{value}")
         host = (parsed.hostname or "").lower()
+
+        # Brand/domain verification: catch obvious lookalikes such as youutube.com.
+        for domain, brand in KNOWN_BRANDS.items():
+            base = domain.split(".")[0]
+            host_base = host.split(".")[0]
+            if host == domain or host.endswith("." + domain):
+                signals.append(f"Recognized site: {brand}")
+                break
+            if _edit_distance(host_base, base) == 1 and len(host_base) >= 4:
+                score += 18
+                signals.append(f"Possible {brand} lookalike domain")
+                break
 
         if parsed.scheme == "http":
             score += 8
@@ -101,6 +154,11 @@ def analyze_payment(amount: float, recipient: str, message: str, link: str):
     elif amount > 5000:
         score += 12
         signals.append("Elevated payment amount")
+
+    # UPI handle reputation signal.
+    upi_score, upi_signals = analyze_upi(recipient_text)
+    score += upi_score
+    signals.extend(upi_signals)
 
     # Prototype recipient trust signal.
     if any(word in recipient_text for word in ["unknown", "new recipient", "unverified"]):
