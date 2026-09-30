@@ -1605,26 +1605,116 @@
       });
 
       // Completion
-      setTimeout(() => {
-        isAnalyzing = false;
-        progressPanel.classList.add('hidden');
-        resultPanel.classList.remove('opacity-40', 'pointer-events-none');
-        btnText.textContent = "ANALYZE PAYMENT";
-        btn.classList.remove('opacity-75');
+setTimeout(async () => {
+  const amount = document.getElementById('input-amount').value
+    .replace(/,/g, '')
+    .trim();
 
-        // Check input field values to determine matching scenario
-        const amt = document.getElementById('input-amount').value.replace(/,/g, '').trim();
-        if (Number(amt) <= 1000) {
-          renderRiskResult(SCENARIOS.safe);
-        } else if (Number(amt) <= 10000) {
-          renderRiskResult(SCENARIOS.review);
-        } else {
-          renderRiskResult(SCENARIOS.high);
-        }
+  const recipient = document.getElementById('input-recipient').value.trim();
+  const message = document.getElementById('input-message').value.trim();
+  const link = document.getElementById('input-link').value.trim();
 
-        // Scroll smoothly to result
-        resultPanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-      }, 1900);
+  try {
+    // Send payment information to the FastAPI backend
+    const response = await fetch('http://127.0.0.1:8000/payment-request', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        amount: Number(amount),
+        recipient: recipient,
+        message: message,
+        link: link
+      })
+    });
+
+    if (!response.ok) {
+      throw new Error('Backend request failed');
+    }
+
+    const data = await response.json();
+
+    console.log('Sentra backend response:', data);
+
+    isAnalyzing = false;
+    progressPanel.classList.add('hidden');
+    resultPanel.classList.remove('opacity-40', 'pointer-events-none');
+    btnText.textContent = "ANALYZE PAYMENT";
+    btn.classList.remove('opacity-75');
+
+    // Keep the existing Sentra risk display
+    // Convert backend result into the format used by Sentra's existing UI
+const level = data.risk_level;
+const score = data.risk_score;
+
+let levelClass;
+let gaugeStroke;
+let headline;
+let subtext;
+let signalType;
+
+if (level === "HIGH") {
+  levelClass = "bg-danger-100 text-danger-700 border-danger-200 dark:bg-danger-950 dark:text-danger-400 dark:border-danger-800/40";
+  gaugeStroke = "#EF4444";
+  headline = "Multiple suspicious signals detected";
+  subtext = "The Sentra backend detected multiple risk indicators in this payment request.";
+  signalType = "danger";
+} else if (level === "REVIEW") {
+  levelClass = "bg-amber-100 text-amber-800 border-amber-200 dark:bg-amber-950 dark:text-amber-400 dark:border-amber-800/40";
+  gaugeStroke = "#F59E0B";
+  headline = "Caution advised: Payment requires review";
+  subtext = "The Sentra backend detected signals that require additional review before payment.";
+  signalType = "amber";
+} else {
+  levelClass = "bg-brand-100 text-brand-800 border-brand-200 dark:bg-brand-950 dark:text-brand-400 dark:border-brand-800/40";
+  gaugeStroke = "#10B981";
+  headline = "Payment context appears consistent";
+  subtext = "The Sentra backend did not detect significant risk indicators.";
+  signalType = "safe";
+}
+
+const backendScenario = {
+  amount: Number(amount).toLocaleString("en-IN"),
+  recipient: recipient,
+  score: score,
+  level: level === "HIGH" ? "HIGH RISK" : level === "REVIEW" ? "REVIEW" : "LOW RISK",
+  levelClass: levelClass,
+  gaugeStroke: gaugeStroke,
+  gaugeOffset: 301.59 - (301.59 * score / 100),
+  headline: headline,
+  subtext: subtext,
+  signals: data.signals.map((signal) => ({
+    title: signal,
+    points: "",
+    desc: "Detected by the Sentra backend risk engine.",
+    type: signalType
+  }))
+};
+
+renderRiskResult(backendScenario);
+
+    // Scroll smoothly to result
+    resultPanel.scrollIntoView({
+      behavior: 'smooth',
+      block: 'nearest'
+    });
+
+  } catch (error) {
+    console.error('Sentra backend error:', error);
+
+    isAnalyzing = false;
+    progressPanel.classList.add('hidden');
+    resultPanel.classList.remove('opacity-40', 'pointer-events-none');
+    btnText.textContent = "ANALYZE PAYMENT";
+    btn.classList.remove('opacity-75');
+
+    alert(
+      "Sentra could not connect to the backend.\n\n" +
+      "Make sure the FastAPI server is running on port 8000."
+    );
+  }
+}, 1900);
     }
 
     // CHECKPOINT USER ACTIONS
