@@ -1620,7 +1620,9 @@ setTimeout(async () => {
 
   try {
     // Send payment information to the FastAPI backend
-    const response = await fetch('http://127.0.0.1:8000/payment-request', {
+    const API_URL = "https://sentra-cwjz.onrender.com";
+
+const response = await fetch(`${API_URL}/payment-request`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
