@@ -2,36 +2,38 @@
 
 ### **See the risk before you send.**
 
-Sentra is an **explainable pre-payment fraud protection layer** for digital payments.
+**Sentra** is an explainable pre-payment fraud detection system designed to warn users about suspicious digital-payment activity **before they send money**.
 
-It analyses signals like:
+### ✨ What it does
 
-* 💰 Transaction amount
-* 👤 Recipient history
-* 💬 Message context
-* 🔗 URL / QR indicators
-* ⚠️ Suspicious behavioural patterns
+* 💰 Analyses transaction context
+* 👤 Flags unfamiliar recipients
+* 💬 Detects suspicious message patterns
+* 🔗 Evaluates URL / payment-request signals
+* 🧠 Explains the risk instead of just showing a score
+* 🛡️ Adds a safety checkpoint before proceeding
 
-Then it:
+### 🔄 The Flow
 
-**Detect → Explain → Protect → Let the user decide.**
+**Detect → Explain → Protect → Decide**
 
-### ✨ Key Features
+### 🎨 Experience
 
-* 🔍 Multi-signal fraud detection
-* 🧠 Explainable risk scoring
-* 🛡️ High-risk payment protection
-* 🔐 Privacy-conscious design
-* 🍏 Premium skeuomorphic + liquid-glass UI
+* Skeuomorphic security UI
+* Liquid-glass surfaces
+* Interactive risk visualization
+* Cursor-following ambient lighting
+* Light / dark mode
+* Responsive micro-interactions
 
-### 🛠️ Tech
+### 🛠️ Tech Stack
 
-**Frontend:** HTML, CSS, JavaScript, Tailwind
-**Backend:** Java + Spring Boot
-**API:** REST
+**Frontend:** HTML • CSS • JavaScript • Tailwind CSS • SVG
+**Backend:** Python
+**Communication:** REST API
 
-### 🎯 Built for
+### 🎯 Hackathon
 
 **VH-S02 — Detecting Digital Payment Scams Before Money Is Sent**
 
-> **Don't wait for the scam to happen. Warn the user before they pay.**
+> **Warn before the payment. Not after the damage.**
