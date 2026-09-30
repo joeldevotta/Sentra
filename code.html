@@ -1,0 +1,1548 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SENTRA — See the risk before you send</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Inter & JetBrains Mono for precision financial instrumentation -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;450;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+            mono: ['JetBrains Mono', 'SF Mono', 'ui-monospace', 'monospace'],
+          },
+          colors: {
+            brand: {
+              50: '#F0FDF4',
+              100: '#DCFCE7',
+              200: '#BBF7D0',
+              300: '#86EFAC',
+              400: '#4ADE80',
+              500: '#10B981',
+              600: '#059669',
+              700: '#047857',
+              800: '#065F46',
+              900: '#064E3B',
+              accent: '#059669',
+            },
+            surface: {
+              50: '#F8FAFC',
+              100: '#F1F5F9',
+              200: '#E2E8F0',
+              300: '#CBD5E1',
+              400: '#94A3B8',
+              500: '#64748B',
+              600: '#475569',
+              700: '#334155',
+              800: '#1E293B',
+              900: '#0F172A',
+              950: '#020617',
+            },
+            danger: {
+              50: '#FEF2F2',
+              100: '#FEE2E2',
+              200: '#FECACA',
+              400: '#F87171',
+              500: '#EF4444',
+              600: '#DC2626',
+              700: '#B91C1C',
+              800: '#991B1B',
+              900: '#7F1D1D',
+              950: '#450A0A',
+            },
+            amber: {
+              50: '#FFFBEB',
+              100: '#FEF3C7',
+              200: '#FDE68A',
+              400: '#FBBF24',
+              500: '#F59E0B',
+              600: '#D97706',
+              700: '#B45309',
+              800: '#92400E',
+              900: '#78350F',
+              950: '#451A03',
+            }
+          },
+          boxShadow: {
+            'modern-sm': '0 1px 2px 0 rgba(15, 23, 42, 0.05)',
+            'modern-card': '0 1px 3px 0 rgba(15, 23, 42, 0.04), 0 10px 25px -5px rgba(15, 23, 42, 0.05), 0 0 0 1px rgba(15, 23, 42, 0.06)',
+            'modern-card-raised': '0 20px 35px -10px rgba(15, 23, 42, 0.08), 0 1px 3px 0 rgba(15, 23, 42, 0.04), 0 0 0 1px rgba(15, 23, 42, 0.08)',
+            'modern-btn-primary': '0 1px 2px rgba(255, 255, 255, 0.3) inset, 0 4px 14px -1px rgba(5, 150, 105, 0.35), 0 2px 4px rgba(15, 23, 42, 0.08)',
+            'modern-btn-danger': '0 1px 2px rgba(255, 255, 255, 0.3) inset, 0 4px 14px -1px rgba(220, 38, 38, 0.35), 0 2px 4px rgba(15, 23, 42, 0.08)',
+            'modern-inset': 'inset 0 2px 4px rgba(15, 23, 42, 0.05), 0 1px 0 rgba(255, 255, 255, 0.8)',
+            'glass-specular': '0 1px 0 0 rgba(255, 255, 255, 0.8) inset, 0 16px 32px -8px rgba(15, 23, 42, 0.07)',
+            'led-glow-emerald': '0 0 10px #10B981, 0 0 3px #34D399',
+            'led-glow-amber': '0 0 10px #F59E0B, 0 0 3px #FBBF24',
+            'led-glow-danger': '0 0 10px #EF4444, 0 0 3px #F87171',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Bright, Crisp & Modern Base */
+    body {
+      background-color: #F8FAFC;
+      color: #0F172A;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      selection-background-color: #10B981;
+      selection-color: #FFFFFF;
+    }
+
+    /* Subtle geometric grid texture with clean slate lines */
+    .bg-grid-subtle {
+      background-size: 32px 32px;
+      background-image: 
+        linear-gradient(to right, rgba(15, 23, 42, 0.035) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(15, 23, 42, 0.035) 1px, transparent 1px);
+    }
+
+    /* Liquid Glass & Modern Cards */
+    .liquid-glass {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(226, 232, 240, 0.9);
+      box-shadow: 0 1px 0 rgba(255, 255, 255, 0.9) inset, 0 10px 30px -5px rgba(15, 23, 42, 0.05);
+    }
+
+    .liquid-glass-dark {
+      background: rgba(248, 250, 252, 0.92);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid rgba(203, 213, 225, 0.8);
+    }
+
+    /* Machine hardware chamfers & bevels - Bright & Modern */
+    .hardware-bezel {
+      border: 1px solid #E2E8F0;
+      background: #FFFFFF;
+      box-shadow: 0 1px 3px 0 rgba(15, 23, 42, 0.04), 0 8px 20px -4px rgba(15, 23, 42, 0.04), inset 0 1px 0 #FFFFFF;
+    }
+
+    .hardware-recessed {
+      background: #F1F5F9;
+      border: 1px solid #E2E8F0;
+      box-shadow: inset 0 2px 4px rgba(15, 23, 42, 0.04), 0 1px 0 #FFFFFF;
+    }
+
+    /* Tactile button active states */
+    .active-press:active {
+      transform: translateY(1px);
+      box-shadow: 0 1px 2px rgba(15, 23, 42, 0.1) inset;
+    }
+
+    /* Dial needle & circle meter styles */
+    .dial-track {
+      stroke: #E2E8F0;
+      stroke-linecap: round;
+    }
+    .dial-value {
+      stroke-linecap: round;
+      transition: stroke-dashoffset 0.9s cubic-bezier(0.16, 1, 0.3, 1), stroke 0.4s ease;
+    }
+
+    /* Custom smooth transition classes */
+    .transition-flow {
+      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #F1F5F9;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #CBD5E1;
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94A3B8;
+    }
+
+    /* Dark Mode Overrides for Toggle Support */
+    .dark body {
+      background-color: #090D0B;
+      color: #E2E8E5;
+    }
+    .dark .bg-grid-subtle {
+      background-image: 
+        linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+    }
+    .dark .liquid-glass {
+      background: rgba(18, 24, 21, 0.85);
+      border-color: rgba(255, 255, 255, 0.08);
+      box-shadow: 0 1px 0 rgba(255, 255, 255, 0.1) inset, 0 16px 36px -8px rgba(0, 0, 0, 0.6);
+    }
+    .dark .hardware-bezel {
+      background: #111714;
+      border-color: rgba(255, 255, 255, 0.08);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    }
+    .dark .hardware-recessed {
+      background: #0A0E0C;
+      border-color: rgba(255, 255, 255, 0.05);
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.6), 0 1px 0 rgba(255, 255, 255, 0.02);
+    }
+    .dark .dial-track {
+      stroke: #1B2620;
+    }
+  </style>
+</head>
+<body class="min-h-screen font-sans bg-surface-50 text-slate-900 antialiased bg-grid-subtle relative overflow-x-hidden selection:bg-brand-500 selection:text-white transition-colors duration-300">
+
+  <!-- Atmospheric Luminous Ambient Depth Gradients (Clean, bright, mint-emerald and cyan ambient light) -->
+  <div class="fixed top-0 left-1/2 -translate-x-1/2 w-[1200px] h-[550px] bg-gradient-to-b from-brand-100/70 via-emerald-50/40 to-transparent blur-[120px] pointer-events-none -z-10 rounded-full"></div>
+  <div class="fixed bottom-0 right-0 w-[600px] h-[450px] bg-sky-100/50 blur-[130px] pointer-events-none -z-10 rounded-full"></div>
+
+  <!-- ==================== TOP NAVIGATION ==================== -->
+  <header class="sticky top-4 z-50 px-4 max-w-7xl mx-auto">
+    <nav class="liquid-glass rounded-2xl px-5 py-3.5 flex items-center justify-between border border-slate-200/90 shadow-modern-card transition-all duration-300">
+      
+      <!-- Brand Logo / Mark -->
+      <div class="flex items-center gap-3">
+        <a href="#overview" onclick="switchTab('overview')" class="flex items-center gap-2.5 group">
+          <div class="w-8 h-8 rounded-lg bg-gradient-to-b from-brand-500 to-brand-700 p-[1px] shadow-sm flex items-center justify-center">
+            <div class="w-full h-full bg-white dark:bg-slate-900 rounded-[7px] flex items-center justify-center relative overflow-hidden">
+              <div class="absolute inset-0 bg-brand-500/10 group-hover:bg-brand-500/20 transition-colors"></div>
+              <!-- Shield / Reticle Mark -->
+              <svg class="w-4 h-4 text-brand-600 dark:text-brand-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                <circle cx="12" cy="11" r="2.5" fill="currentColor"></circle>
+              </svg>
+            </div>
+          </div>
+          <div class="flex flex-col">
+            <div class="flex items-center gap-1.5">
+              <span class="text-sm font-bold tracking-wider text-slate-900 dark:text-white">SENTRA</span>
+              <span class="text-[9px] font-mono tracking-widest text-brand-700 dark:text-brand-300 font-bold px-1.5 py-0.5 bg-brand-100 dark:bg-brand-950/80 border border-brand-300 dark:border-brand-800 rounded">LAYER 0</span>
+            </div>
+            <span class="text-[10px] text-slate-500 dark:text-slate-400 font-mono tracking-tight leading-none mt-0.5 font-medium">PRE-PAYMENT DEFENSE</span>
+          </div>
+        </a>
+      </div>
+
+      <!-- Center Nav Links -->
+      <div class="hidden md:flex items-center space-x-1 bg-slate-100/90 dark:bg-slate-900/80 p-1 rounded-xl border border-slate-200 dark:border-white/5 shadow-inner">
+        <button onclick="switchTab('overview')" id="nav-btn-overview" class="nav-tab px-3.5 py-1.5 rounded-lg text-xs font-semibold text-slate-900 dark:text-white bg-white dark:bg-slate-800 shadow-sm border border-slate-200/80 dark:border-white/10 transition-all">Overview</button>
+        <button onclick="switchTab('check')" id="nav-btn-check" class="nav-tab px-3.5 py-1.5 rounded-lg text-xs font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-white/60 dark:hover:bg-white/5 transition-all">Check Payment</button>
+        <button onclick="switchTab('history')" id="nav-btn-history" class="nav-tab px-3.5 py-1.5 rounded-lg text-xs font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-white/60 dark:hover:bg-white/5 transition-all">Safety History</button>
+        <button onclick="switchTab('how-it-works')" id="nav-btn-how-it-works" class="nav-tab px-3.5 py-1.5 rounded-lg text-xs font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-white/60 dark:hover:bg-white/5 transition-all">How Sentra Works</button>
+      </div>
+
+      <!-- Right Status & Controls -->
+      <div class="flex items-center gap-2.5">
+        <!-- Live Engine Status Badge -->
+        <div class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 text-xs font-mono shadow-sm">
+          <div class="relative flex items-center justify-center">
+            <span class="w-2 h-2 rounded-full bg-brand-500 shadow-led-glow-emerald"></span>
+            <span class="absolute w-2 h-2 rounded-full bg-brand-500 animate-ping opacity-75"></span>
+          </div>
+          <div class="flex flex-col text-left">
+            <span class="text-[9px] uppercase tracking-wider text-slate-400 dark:text-slate-500 leading-none">Protection Engine</span>
+            <span class="text-[11px] font-bold text-brand-600 dark:text-brand-400 tracking-wide mt-0.5">ACTIVE</span>
+          </div>
+        </div>
+
+        <!-- Inspect Checkpoint CTA -->
+        <button onclick="quickTestHighRisk()" class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 hover:border-brand-500/50 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:text-brand-600 dark:hover:text-white shadow-sm active-press transition-all">
+          <svg class="w-3.5 h-3.5 text-brand-600 dark:text-brand-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>
+          </svg>
+          <span class="font-mono text-[11px]">Inspect Checkpoint</span>
+        </button>
+
+        <!-- Theme Toggle Switcher -->
+        <button onclick="toggleTheme()" id="theme-toggle-btn" title="Toggle Bright / Dark mode" class="p-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-300 hover:text-brand-600 hover:bg-slate-50 transition-colors shadow-sm">
+          <!-- Sun Icon (shown in dark mode) -->
+          <svg id="theme-sun-icon" class="w-4 h-4 hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+          <!-- Moon Icon (shown in light mode) -->
+          <svg id="theme-moon-icon" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+        </button>
+      </div>
+
+    </nav>
+  </header>
+
+  <!-- ==================== MAIN CONTENT CONTAINER ==================== -->
+  <main class="max-w-7xl mx-auto px-4 py-8 md:py-12">
+
+    <!-- TAB 1: OVERVIEW & TERMINAL HERO -->
+    <section id="view-overview" class="view-panel transition-flow">
+      
+      <!-- Editorial Hero Header -->
+      <div class="text-center max-w-3xl mx-auto pt-4 pb-10">
+        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-50 border border-brand-200 dark:bg-brand-950/60 dark:border-brand-800/40 mb-6 shadow-sm">
+          <span class="w-2 h-2 rounded-full bg-brand-500 animate-pulse"></span>
+          <span class="text-[11px] font-mono uppercase tracking-wider text-brand-700 dark:text-brand-300 font-bold">EXPLAINABLE PRE-PAYMENT FRAUD DETECTION</span>
+        </div>
+        
+        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-slate-900 dark:text-slate-50 leading-[1.12]">
+          See the risk <br class="hidden sm:inline">
+          <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-600 via-emerald-600 to-teal-600 dark:from-brand-300 dark:to-emerald-500">before you send.</span>
+        </h1>
+
+        <p class="mt-5 text-base sm:text-lg text-slate-600 dark:text-slate-300 font-normal leading-relaxed max-w-2xl mx-auto">
+          Sentra analyzes payment context before money moves — identifying suspicious signals across transaction volume, urgency language, and context mismatch before you make the final decision.
+        </p>
+
+        <!-- CTA Buttons -->
+        <div class="mt-8 flex flex-wrap items-center justify-center gap-4">
+          <button onclick="switchTab('check')" class="px-6 py-3.5 rounded-xl bg-gradient-to-b from-brand-500 via-brand-600 to-brand-700 hover:from-brand-400 hover:to-brand-600 text-white font-semibold text-sm shadow-modern-btn-primary active-press flex items-center gap-2 transition-all">
+            <svg class="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+              <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <span>Check a Payment</span>
+          </button>
+          
+          <button onclick="switchTab('how-it-works')" class="px-6 py-3.5 rounded-xl bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:text-slate-900 hover:bg-slate-50 font-semibold text-sm active-press border border-slate-200 dark:border-white/10 shadow-sm transition-all flex items-center gap-2">
+            <span>How Sentra Works</span>
+            <svg class="w-3.5 h-3.5 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 12h14M12 5l7 7-7 7"></path>
+            </svg>
+          </button>
+        </div>
+
+        <!-- 4-Phase System Pill Strip -->
+        <div class="mt-10 inline-flex items-center gap-2 sm:gap-3 px-4 py-2 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 text-[11px] font-mono shadow-sm">
+          <span class="text-brand-600 dark:text-brand-400 font-bold">DETECT</span>
+          <span class="text-slate-300 dark:text-slate-600">→</span>
+          <span class="text-brand-600 dark:text-brand-400 font-bold">EXPLAIN</span>
+          <span class="text-slate-300 dark:text-slate-600">→</span>
+          <span class="text-brand-600 dark:text-brand-400 font-bold">PROTECT</span>
+          <span class="text-slate-300 dark:text-slate-600">→</span>
+          <span class="text-slate-800 dark:text-slate-200 font-bold">DECIDE</span>
+        </div>
+      </div>
+
+      <!-- PHYSICAL FINANCIAL SECURITY TERMINAL (HERO ELEMENT) -->
+      <div class="mt-4 max-w-4xl mx-auto">
+        <div class="hardware-bezel rounded-3xl p-3 sm:p-4 shadow-modern-card-raised border border-slate-200 dark:border-white/10 relative">
+          
+          <!-- Terminal Chrome Bar -->
+          <div class="flex items-center justify-between px-4 py-2.5 bg-slate-50 dark:bg-slate-900/60 rounded-t-2xl border-b border-slate-200/80 dark:border-white/5 text-slate-500 dark:text-slate-400 text-[11px] font-mono">
+            <div class="flex items-center gap-2">
+              <div class="w-2 h-2 rounded-full bg-brand-500"></div>
+              <span class="font-semibold text-slate-700 dark:text-slate-300">SENTRA TERMINAL SEC-OS // V3.8.4</span>
+            </div>
+            <div class="flex items-center gap-3">
+              <span class="text-brand-600 dark:text-brand-400 font-semibold">LATENCY: 14ms</span>
+              <span class="hidden sm:inline text-slate-300 dark:text-slate-700">|</span>
+              <span class="hidden sm:inline text-slate-500 dark:text-slate-400">ZERO-STORE PRIVACY PROTOCOL</span>
+              <div class="w-2 h-2 rounded-full bg-slate-300 dark:bg-slate-600"></div>
+            </div>
+          </div>
+
+          <!-- Terminal Screen Body -->
+          <div class="bg-white dark:bg-slate-950 rounded-2xl p-5 sm:p-7 hardware-recessed mt-2 grid grid-cols-1 md:grid-cols-12 gap-6 items-center border border-slate-200 dark:border-white/5">
+            
+            <!-- Left Info Panel -->
+            <div class="md:col-span-7 space-y-5">
+              <div class="flex items-center justify-between">
+                <span class="text-xs uppercase tracking-wider font-mono text-slate-500 dark:text-slate-400 font-semibold">Target Context Payload</span>
+                <span class="text-xs font-mono font-bold text-amber-700 dark:text-amber-300 px-2.5 py-0.5 rounded-md bg-amber-50 dark:bg-amber-950/60 border border-amber-300 dark:border-amber-800/40">SIMULATED INTERCEPTION</span>
+              </div>
+
+              <!-- Recessed Amount & Recipient Box -->
+              <div class="p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 shadow-sm space-y-3">
+                <div class="flex justify-between items-baseline">
+                  <span class="text-xs font-mono text-slate-500 dark:text-slate-400 font-medium">AMOUNT PENDING</span>
+                  <span class="text-2xl sm:text-3xl font-bold font-mono text-slate-900 dark:text-white tracking-tight">₹45,000.00</span>
+                </div>
+                <div class="h-px bg-slate-100 dark:bg-white/5"></div>
+                <div class="flex justify-between items-center text-xs">
+                  <span class="font-mono text-slate-500 dark:text-slate-400">TARGET VPA</span>
+                  <span class="font-mono text-slate-800 dark:text-slate-200 bg-slate-100 dark:bg-slate-950 px-2.5 py-1 rounded-md border border-slate-200 dark:border-white/5 flex items-center gap-1.5 font-semibold">
+                    <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+                    unknown@upi
+                    <span class="text-[9px] text-amber-700 dark:text-amber-300 font-bold px-1.5 py-0.2 rounded bg-amber-100 dark:bg-amber-900/40">NEW</span>
+                  </span>
+                </div>
+              </div>
+
+              <!-- Signal Matrix -->
+              <div class="grid grid-cols-2 gap-2 text-xs font-mono">
+                <div class="p-2.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 shadow-sm flex items-center justify-between">
+                  <span class="text-slate-500 dark:text-slate-400 font-medium">URGENCY TRIGGER</span>
+                  <span class="text-danger-600 dark:text-danger-400 font-bold">DETECTED</span>
+                </div>
+                <div class="p-2.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 shadow-sm flex items-center justify-between">
+                  <span class="text-slate-500 dark:text-slate-400 font-medium">DOMAIN AFFINITY</span>
+                  <span class="text-danger-600 dark:text-danger-400 font-bold">MISMATCH</span>
+                </div>
+                <div class="p-2.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 shadow-sm flex items-center justify-between">
+                  <span class="text-slate-500 dark:text-slate-400 font-medium">VPA AGE</span>
+                  <span class="text-amber-600 dark:text-amber-400 font-bold">&lt; 48 HOURS</span>
+                </div>
+                <div class="p-2.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 shadow-sm flex items-center justify-between">
+                  <span class="text-slate-500 dark:text-slate-400 font-medium">ACTION</span>
+                  <span class="text-brand-600 dark:text-brand-400 font-bold">GATE ENGAGED</span>
+                </div>
+              </div>
+
+              <div class="pt-2 flex items-center gap-3">
+                <button onclick="loadScenario('high'); switchTab('check');" class="flex-1 py-3 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 dark:bg-slate-800 dark:hover:bg-slate-700 text-xs font-semibold font-mono text-white shadow-sm active-press transition-all text-center">
+                  Analyze This Payload →
+                </button>
+              </div>
+            </div>
+
+            <!-- Right Physical Gauge Visualization in Terminal -->
+            <div class="md:col-span-5 flex flex-col items-center justify-center p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 text-center shadow-sm">
+              <span class="text-[10px] font-mono uppercase tracking-wider font-bold text-slate-500 dark:text-slate-400 mb-2">INTEGRATED RISK INSTRUMENT</span>
+              
+              <!-- Circular Physical Gauge Graphic -->
+              <div class="relative w-44 h-44 flex items-center justify-center my-2">
+                <svg class="w-full h-full -rotate-90" viewBox="0 0 120 120">
+                  <circle cx="60" cy="60" r="48" fill="none" class="dial-track" stroke-width="8"></circle>
+                  <circle cx="60" cy="60" r="48" fill="none" stroke="#EF4444" stroke-width="8" stroke-dasharray="301.59" stroke-dashoffset="30" class="dial-value"></circle>
+                </svg>
+                <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
+                  <span class="text-[9px] font-mono text-danger-600 dark:text-danger-400 font-bold tracking-wider">CRITICAL LEVEL</span>
+                  <span class="text-3xl font-extrabold font-mono text-slate-900 dark:text-white tracking-tighter">90<span class="text-xs text-slate-400 font-normal">/100</span></span>
+                  <span class="text-[10px] font-mono font-bold text-danger-700 dark:text-danger-300 bg-danger-100 dark:bg-danger-950/80 px-2 py-0.5 rounded border border-danger-200 dark:border-danger-800/40 mt-1">HIGH RISK</span>
+                </div>
+              </div>
+
+              <p class="text-xs text-slate-500 dark:text-slate-400 max-w-[220px] leading-relaxed font-medium">
+                4 compound anomalies triggered safety checkpoint.
+              </p>
+            </div>
+
+          </div>
+
+          <!-- Terminal Bottom Tactile Status Bar -->
+          <div class="px-4 py-2.5 mt-2 flex flex-wrap items-center justify-between text-[11px] text-slate-500 dark:text-slate-400 font-mono">
+            <div class="flex items-center gap-4">
+              <span class="flex items-center gap-1.5 font-medium">
+                <span class="w-2 h-2 rounded-full bg-brand-500"></span>
+                PRE-TRANSACTION INSPECTION
+              </span>
+              <span class="hidden sm:inline text-slate-300 dark:text-slate-700">|</span>
+              <span class="hidden sm:inline">ZERO STORAGE OF BANK CREDENTIALS</span>
+            </div>
+            <div class="text-brand-600 dark:text-brand-400 font-bold">SIMULATION ACTIVE</div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Quick Feature Anchors (Apple/Stripe-grade triad) -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-14">
+        
+        <div class="p-6 rounded-2xl hardware-bezel space-y-3 transition-all hover:shadow-modern-card">
+          <div class="w-10 h-10 rounded-xl bg-brand-50 dark:bg-slate-800 border border-brand-200 dark:border-white/10 flex items-center justify-center text-brand-600 dark:text-brand-400 shadow-sm">
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path>
+            </svg>
+          </div>
+          <h3 class="text-base font-bold text-slate-900 dark:text-white">Pre-Flight Signal Inspection</h3>
+          <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+            Catches social engineering, psychological pressure verbs, and fake banking verification domains prior to payment execution.
+          </p>
+        </div>
+
+        <div class="p-6 rounded-2xl hardware-bezel space-y-3 transition-all hover:shadow-modern-card">
+          <div class="w-10 h-10 rounded-xl bg-brand-50 dark:bg-slate-800 border border-brand-200 dark:border-white/10 flex items-center justify-center text-brand-600 dark:text-brand-400 shadow-sm">
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line>
+            </svg>
+          </div>
+          <h3 class="text-base font-bold text-slate-900 dark:text-white">Radical Explainability</h3>
+          <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+            Never just labels a transaction "suspicious". Provides point-by-point score attribution so users understand the precise risk basis.
+          </p>
+        </div>
+
+        <div class="p-6 rounded-2xl hardware-bezel space-y-3 transition-all hover:shadow-modern-card">
+          <div class="w-10 h-10 rounded-xl bg-brand-50 dark:bg-slate-800 border border-brand-200 dark:border-white/10 flex items-center justify-center text-brand-600 dark:text-brand-400 shadow-sm">
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+            </svg>
+          </div>
+          <h3 class="text-base font-bold text-slate-900 dark:text-white">Human-In-The-Loop Gate</h3>
+          <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+            Sentra does not freeze accounts or hold funds. It provides a tactile circuit-breaker for the human to verify via independent channels.
+          </p>
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- TAB 2: PAYMENT CHECK SCREEN (THE CORE MONEY-SHOT SCREEN) -->
+    <section id="view-check" class="view-panel hidden transition-flow">
+      
+      <!-- Top Sub-Header & Scenario Switcher -->
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-6 border-b border-slate-200 dark:border-white/10">
+        <div>
+          <div class="flex items-center gap-2 mb-1.5">
+            <span class="text-[10px] font-mono uppercase tracking-wider font-bold text-brand-700 dark:text-brand-300 px-2.5 py-0.5 rounded-md bg-brand-50 dark:bg-brand-950 border border-brand-200 dark:border-brand-800/40">PRIMARY INSPECTION ENGINE</span>
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">Check a Payment</h2>
+          <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-1">Review the situation before money moves.</p>
+        </div>
+
+        <!-- 3 DEMO STATES: SCENARIO SELECTOR SWITCH -->
+        <div class="flex flex-col items-start md:items-end gap-1.5">
+          <span class="text-[10px] font-mono uppercase tracking-wider text-slate-500 font-semibold">TEST PRESET SCENARIOS</span>
+          <div class="inline-flex p-1 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-white/10 shadow-inner">
+            <button onclick="loadScenario('safe')" id="btn-scen-safe" class="px-3.5 py-1.5 rounded-lg text-xs font-mono font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all">
+              SAFE (8)
+            </button>
+            <button onclick="loadScenario('review')" id="btn-scen-review" class="px-3.5 py-1.5 rounded-lg text-xs font-mono font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all">
+              REVIEW (58)
+            </button>
+            <button onclick="loadScenario('high')" id="btn-scen-high" class="px-3.5 py-1.5 rounded-lg text-xs font-mono font-bold text-slate-900 dark:text-white bg-white dark:bg-slate-800 shadow-sm border border-slate-200/90 dark:border-white/10 transition-all">
+              HIGH RISK (90)
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- MAIN DUAL-PANEL GRID -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 mt-6">
+        
+        <!-- LEFT: INPUT PAYMENT PANEL (TACTILE FINANCIAL CONSOLE) -->
+        <div class="lg:col-span-5 space-y-6">
+          <div class="hardware-bezel rounded-2xl p-6 shadow-modern-card border border-slate-200 dark:border-white/10 relative">
+            
+            <div class="flex items-center justify-between pb-4 border-b border-slate-100 dark:border-white/5">
+              <div class="flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-brand-500 shadow-led-glow-emerald"></span>
+                <span class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider font-mono">Payment Context Input</span>
+              </div>
+              <span class="text-[10px] font-mono text-slate-400 font-semibold">UNCOMMITTED PAYLOAD</span>
+            </div>
+
+            <!-- Form Elements -->
+            <form id="payment-form" onsubmit="event.preventDefault(); startAnalysis();" class="space-y-4.5 mt-5">
+              
+              <!-- Amount -->
+              <div>
+                <label class="block text-[10px] font-mono uppercase tracking-wider text-slate-600 dark:text-slate-400 font-bold mb-1.5">
+                  Amount (INR)
+                </label>
+                <div class="relative hardware-recessed rounded-xl p-3 flex items-center border border-slate-200 dark:border-white/10 focus-within:border-brand-500 focus-within:ring-2 focus-within:ring-brand-500/20 transition-all bg-white dark:bg-slate-900">
+                  <span class="text-slate-400 font-mono text-lg mr-2 font-bold">₹</span>
+                  <input type="text" id="input-amount" value="45,000" class="w-full bg-transparent text-xl font-mono font-bold text-slate-900 dark:text-white focus:outline-none" placeholder="0.00" required="">
+                  <span class="text-[10px] font-mono font-semibold text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded border border-slate-200 dark:border-white/5">UPI PEER</span>
+                </div>
+              </div>
+
+              <!-- Recipient -->
+              <div>
+                <div class="flex justify-between items-center mb-1.5">
+                  <label class="text-[10px] font-mono uppercase tracking-wider text-slate-600 dark:text-slate-400 font-bold">
+                    Recipient Handle / VPA
+                  </label>
+                  <span id="badge-recipient" class="text-[9px] font-mono font-bold px-2 py-0.5 rounded border bg-danger-100 text-danger-700 border-danger-200 dark:bg-danger-950 dark:text-danger-300 dark:border-danger-800/40">NEW RECIPIENT</span>
+                </div>
+                <div class="relative hardware-recessed rounded-xl p-3 flex items-center border border-slate-200 dark:border-white/10 focus-within:border-brand-500 focus-within:ring-2 focus-within:ring-brand-500/20 transition-all bg-white dark:bg-slate-900">
+                  <svg class="w-4 h-4 text-slate-400 mr-2.5 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle>
+                  </svg>
+                  <input type="text" id="input-recipient" value="unknown@upi" class="w-full bg-transparent text-sm font-mono font-semibold text-slate-800 dark:text-slate-100 focus:outline-none" placeholder="recipient@upi" required="">
+                </div>
+              </div>
+
+              <!-- Message / Request Context -->
+              <div>
+                <label class="block text-[10px] font-mono uppercase tracking-wider text-slate-600 dark:text-slate-400 font-bold mb-1.5">
+                  Accompanying Message / Request Text
+                </label>
+                <div class="hardware-recessed rounded-xl p-3 border border-slate-200 dark:border-white/10 focus-within:border-brand-500 focus-within:ring-2 focus-within:ring-brand-500/20 transition-all bg-white dark:bg-slate-900">
+                  <textarea id="input-message" rows="3" class="w-full bg-transparent text-xs text-slate-800 dark:text-slate-200 focus:outline-none leading-relaxed resize-none font-sans" placeholder="Paste the message or note accompanying this payment request...">URGENT! Your bank account will be blocked. Verify your account by making this payment immediately.</textarea>
+                </div>
+              </div>
+
+              <!-- Link / Source URL -->
+              <div>
+                <label class="block text-[10px] font-mono uppercase tracking-wider text-slate-600 dark:text-slate-400 font-bold mb-1.5">
+                  Attached Link (Optional)
+                </label>
+                <div class="relative hardware-recessed rounded-xl p-3 flex items-center border border-slate-200 dark:border-white/10 focus-within:border-brand-500 focus-within:ring-2 focus-within:ring-brand-500/20 transition-all bg-white dark:bg-slate-900">
+                  <svg class="w-4 h-4 text-slate-400 mr-2 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+                    <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+                  </svg>
+                  <input type="text" id="input-link" value="http://secure-account-verification.example" class="w-full bg-transparent text-xs font-mono text-slate-800 dark:text-slate-200 focus:outline-none" placeholder="https://...">
+                </div>
+              </div>
+
+              <!-- Primary Analyze Button -->
+              <div class="pt-2">
+                <button type="submit" id="btn-analyze" class="w-full py-3.5 px-4 rounded-xl bg-gradient-to-b from-brand-500 via-brand-600 to-brand-700 hover:from-brand-400 hover:to-brand-600 text-white font-mono font-bold text-xs tracking-wider uppercase shadow-modern-btn-primary active-press flex items-center justify-center gap-2 transition-all">
+                  <svg class="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                    <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                  </svg>
+                  <span id="btn-analyze-text">ANALYZE PAYMENT</span>
+                </button>
+              </div>
+
+              <!-- Privacy Statement Assurance -->
+              <div class="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-white/5 flex items-start gap-2.5">
+                <svg class="w-4 h-4 text-brand-600 dark:text-brand-400 flex-shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                </svg>
+                <p class="text-[11px] text-slate-600 dark:text-slate-400 leading-tight">
+                  <strong class="text-slate-800 dark:text-slate-200 font-semibold">Zero-Leak Assurance:</strong> Sentra analyzes only context signals provided. No banking credentials, account passwords, or UPI PINs are ever requested or accessible.
+                </p>
+              </div>
+
+            </form>
+          </div>
+        </div>
+
+        <!-- RIGHT: ANALYSIS STATE & EXPLAINABLE RISK DASHBOARD -->
+        <div class="lg:col-span-7 space-y-6">
+          
+          <!-- REFINED SECURITY ANALYSIS INSTRUMENT (PROGRESS ANIMATOR) -->
+          <div id="analysis-progress-panel" class="hidden hardware-bezel rounded-2xl p-6 shadow-modern-card border border-brand-300 dark:border-brand-500/20">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-white/5">
+              <span class="text-xs font-mono font-bold text-brand-600 dark:text-brand-400 tracking-wider flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-brand-500 animate-pulse"></span>
+                PRECISION SECURITY ANALYSIS IN PROGRESS
+              </span>
+              <span id="analysis-step-timer" class="text-[10px] font-mono text-slate-400 font-semibold">EVALUATING STAGES</span>
+            </div>
+
+            <!-- Multi-step Diagnostic Telemetry -->
+            <div class="space-y-3 mt-4 font-mono text-xs">
+              
+              <div id="step-1" class="flex items-center justify-between p-2.5 rounded-lg bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-white/5 text-slate-500 dark:text-slate-400 transition-colors">
+                <span class="flex items-center gap-2">
+                  <span class="step-icon w-4 h-4 rounded-full border border-slate-400 flex items-center justify-center text-[9px] font-bold">1</span>
+                  Transaction Context & Amount Baseline
+                </span>
+                <span class="step-status text-[11px] text-slate-400 font-semibold">QUEUED</span>
+              </div>
+
+              <div id="step-2" class="flex items-center justify-between p-2.5 rounded-lg bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-white/5 text-slate-500 dark:text-slate-400 transition-colors">
+                <span class="flex items-center gap-2">
+                  <span class="step-icon w-4 h-4 rounded-full border border-slate-400 flex items-center justify-center text-[9px] font-bold">2</span>
+                  Recipient Trust Graph & New Handle Signals
+                </span>
+                <span class="step-status text-[11px] text-slate-400 font-semibold">QUEUED</span>
+              </div>
+
+              <div id="step-3" class="flex items-center justify-between p-2.5 rounded-lg bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-white/5 text-slate-500 dark:text-slate-400 transition-colors">
+                <span class="flex items-center gap-2">
+                  <span class="step-icon w-4 h-4 rounded-full border border-slate-400 flex items-center justify-center text-[9px] font-bold">3</span>
+                  Message Urgency & Psychological Coercion Language
+                </span>
+                <span class="step-status text-[11px] text-slate-400 font-semibold">QUEUED</span>
+              </div>
+
+              <div id="step-4" class="flex items-center justify-between p-2.5 rounded-lg bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-white/5 text-slate-500 dark:text-slate-400 transition-colors">
+                <span class="flex items-center gap-2">
+                  <span class="step-icon w-4 h-4 rounded-full border border-slate-400 flex items-center justify-center text-[9px] font-bold">4</span>
+                  Destination Link & Phishing Affinity Analysis
+                </span>
+                <span class="step-status text-[11px] text-slate-400 font-semibold">QUEUED</span>
+              </div>
+
+              <div id="step-5" class="flex items-center justify-between p-2.5 rounded-lg bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-white/5 text-slate-500 dark:text-slate-400 transition-colors">
+                <span class="flex items-center gap-2">
+                  <span class="step-icon w-4 h-4 rounded-full border border-slate-400 flex items-center justify-center text-[9px] font-bold">5</span>
+                  Multi-Factor Risk Synthesis & Explainability Engine
+                </span>
+                <span class="step-status text-[11px] text-slate-400 font-semibold">QUEUED</span>
+              </div>
+
+            </div>
+
+            <div class="w-full bg-slate-100 dark:bg-slate-950 h-2 rounded-full mt-5 overflow-hidden border border-slate-200 dark:border-white/5">
+              <div id="analysis-progress-bar" class="h-full bg-gradient-to-r from-brand-500 to-teal-500 transition-all duration-300 w-0"></div>
+            </div>
+          </div>
+
+          <!-- THE MONEY SHOT: RISK RESULT & PRECISION PHYSICAL GAUGE -->
+          <div id="risk-result-panel" class="hardware-bezel rounded-2xl p-6 sm:p-7 shadow-modern-card-raised border border-slate-200 dark:border-white/10 space-y-6">
+            
+            <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-white/5">
+              <div class="flex items-center gap-2">
+                <span class="text-xs font-mono uppercase tracking-wider text-slate-500 dark:text-slate-400 font-bold">Risk Assessment Diagnostic</span>
+              </div>
+              <span id="result-timestamp" class="text-[10px] font-mono text-slate-400 font-semibold">EVALUATED AT 10:02 AM</span>
+            </div>
+
+            <!-- GAUGE + METRICS HEADER -->
+            <div class="flex flex-col sm:flex-row items-center gap-6 sm:gap-8 bg-slate-50 dark:bg-slate-950/80 p-5 rounded-2xl hardware-recessed border border-slate-200 dark:border-white/5">
+              
+              <!-- Dimensional Precision Dial -->
+              <div class="relative w-40 h-40 flex-shrink-0 flex items-center justify-center">
+                <svg class="w-full h-full -rotate-90" viewBox="0 0 120 120">
+                  <!-- Dial Track -->
+                  <circle cx="60" cy="60" r="48" fill="none" class="dial-track" stroke-width="9"></circle>
+                  <!-- Dial Animated Value -->
+                  <circle id="gauge-circle" cx="60" cy="60" r="48" fill="none" stroke="#EF4444" stroke-width="9" stroke-dasharray="301.59" stroke-dashoffset="30" class="dial-value" style="stroke-dashoffset: 30;"></circle>
+                </svg>
+                <!-- Gauge Inner Cap -->
+                <div class="absolute inset-4 rounded-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 shadow-md flex flex-col items-center justify-center text-center">
+                  <span class="text-[9px] font-mono text-slate-400 dark:text-slate-400 uppercase tracking-widest leading-none mb-0.5 font-bold">SCORE</span>
+                  <div class="flex items-baseline">
+                    <span id="display-score-num" class="text-3xl font-extrabold font-mono text-slate-900 dark:text-white tracking-tight">90</span>
+                    <span class="text-[11px] font-mono text-slate-400 font-normal">/100</span>
+                  </div>
+                  <span id="display-score-badge" class="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded border mt-1 bg-danger-100 text-danger-700 border-danger-200 dark:bg-danger-950 dark:text-danger-400 dark:border-danger-800/40">HIGH RISK</span>
+                </div>
+              </div>
+
+              <!-- Context Details Beside Gauge -->
+              <div class="space-y-2 text-center sm:text-left flex-1">
+                <div class="flex flex-wrap items-center justify-center sm:justify-start gap-2">
+                  <span id="display-level-pill" class="text-xs font-mono font-bold px-2.5 py-1 rounded-md border bg-danger-100 text-danger-700 border-danger-200 dark:bg-danger-950 dark:text-danger-400 dark:border-danger-800/40">HIGH RISK</span>
+                  <span class="text-xs font-mono text-slate-500 dark:text-slate-400 font-medium">Transparent Signals Engine</span>
+                </div>
+
+                <h3 id="display-risk-headline" class="text-lg font-bold text-slate-900 dark:text-white tracking-tight">Multiple suspicious signals detected</h3>
+
+                <p id="display-risk-subtext" class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed font-normal">Coercive urgency terminology, unverified recipient handle, and deceptive verification URL combined to trigger critical checkpoint.</p>
+
+                <div class="pt-2 flex flex-wrap gap-4 text-xs font-mono text-slate-500 dark:text-slate-400 border-t border-slate-200 dark:border-white/5">
+                  <div>
+                    <span class="text-slate-400 block text-[10px] font-medium">PAYLOAD AMOUNT</span>
+                    <span id="display-payload-amount" class="text-slate-900 dark:text-white font-bold">₹45,000</span>
+                  </div>
+                  <div>
+                    <span class="text-slate-400 block text-[10px] font-medium">TARGET VPA</span>
+                    <span id="display-payload-vpa" class="text-slate-900 dark:text-white font-bold">unknown@upi</span>
+                  </div>
+                  <div>
+                    <span class="text-slate-400 block text-[10px] font-medium">GATE STATE</span>
+                    <span id="display-payload-gate" class="text-danger-600 dark:text-danger-400 font-bold">ENGAGED</span>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- EXPLAINABILITY BREAKDOWN: INDIVIDUAL CONTRIBUTING SIGNALS -->
+            <div class="space-y-3">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                  <span class="text-xs font-mono uppercase tracking-wider text-slate-800 dark:text-slate-200 font-bold">SIGNAL DECOMPOSITION</span>
+                  <span class="text-[10px] text-slate-400 font-mono">(“Don’t just say scam — show why”)</span>
+                </div>
+                <span class="text-[10px] font-mono text-brand-600 dark:text-brand-400 font-bold">100% EXPLAINABLE</span>
+              </div>
+
+              <!-- Signal Cards Container -->
+              <div id="signals-container" class="space-y-2.5">
+                <!-- Populated dynamically -->
+              </div>
+            </div>
+
+            <!-- LIQUID GLASS PROTECTION GATE (SIMULATED SAFETY CHECKPOINT) -->
+            <div id="protection-gate-card" class="rounded-2xl p-5 border border-danger-200 dark:border-danger-500/40 bg-danger-50/70 dark:bg-danger-950/40 shadow-sm space-y-4">
+              <div class="flex items-start justify-between gap-3">
+                <div class="flex items-center gap-2.5">
+                  <div class="w-8 h-8 rounded-xl bg-danger-100 dark:bg-danger-950 border border-danger-200 dark:border-danger-800/50 flex items-center justify-center text-danger-600 dark:text-danger-400 flex-shrink-0">
+                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                      <path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                    </svg>
+                  </div>
+                  <div>
+                    <h4 class="text-sm font-bold text-slate-900 dark:text-white">Payment Protection Gate</h4>
+                    <p class="text-xs text-slate-600 dark:text-slate-300 mt-0.5">Sentra intercepted high-probability deception patterns.</p>
+                  </div>
+                </div>
+                <span class="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-danger-100 text-danger-700 border border-danger-200 dark:bg-danger-950 dark:text-danger-400 dark:border-danger-800/40">
+                  SAFETY CHECKPOINT
+                </span>
+              </div>
+
+              <div class="p-3 rounded-xl bg-white dark:bg-slate-950/80 border border-danger-100 dark:border-white/5 font-mono text-xs space-y-1">
+                <div class="flex justify-between text-slate-600 dark:text-slate-300">
+                  <span>UNVERIFIED TRANSACTION:</span>
+                  <span class="text-slate-900 dark:text-white font-bold" id="gate-amount-recipient">₹45,000 · unknown@upi</span>
+                </div>
+                <p class="text-[11px] text-danger-600 dark:text-danger-400 font-sans leading-tight pt-1 font-medium">
+                  Recommendation: Verify recipient through an independent channel (direct phone call or verified directory) before proceeding.
+                </p>
+              </div>
+
+              <!-- Action Controls -->
+              <div class="flex flex-col sm:flex-row gap-3 pt-1">
+                <button onclick="recordCheckpointAction('cancelled')" class="flex-1 py-3 px-4 rounded-xl bg-danger-600 hover:bg-danger-500 text-white text-xs font-mono font-bold uppercase tracking-wider shadow-modern-btn-danger active-press border border-danger-500 transition-all flex items-center justify-center gap-2">
+                  <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                    <line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line>
+                  </svg>
+                  <span>CANCEL PAYMENT</span>
+                </button>
+
+                <button onclick="recordCheckpointAction('overridden')" class="sm:w-48 py-3 px-4 rounded-xl bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:text-slate-900 hover:bg-slate-50 text-xs font-mono font-semibold uppercase tracking-wider active-press border border-slate-200 dark:border-white/10 shadow-sm transition-colors flex items-center justify-center gap-1.5">
+                  <span>REVIEW & PROCEED</span>
+                  <svg class="w-3.5 h-3.5 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                  </svg>
+                </button>
+              </div>
+
+              <p class="text-[10px] text-slate-400 font-mono text-center pt-1">
+                *Simulated safety checkpoint for prototype demonstration. Sentra operates as a contextual intelligence layer and does not hold UPI or banking funds.
+              </p>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- TAB 3: SAFETY HISTORY -->
+    <section id="view-history" class="view-panel hidden transition-flow">
+      
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-6 border-b border-slate-200 dark:border-white/10">
+        <div>
+          <div class="flex items-center gap-2 mb-1.5">
+            <span class="text-[10px] font-mono uppercase tracking-wider font-bold text-brand-700 dark:text-brand-300 px-2.5 py-0.5 rounded-md bg-brand-50 dark:bg-brand-950 border border-brand-200 dark:border-brand-800/40">AUDIT REGISTER</span>
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">Safety History</h2>
+          <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-1">Compact physical records of recent payment context evaluations.</p>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <button onclick="clearHistoryRecords()" class="text-xs font-mono font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white px-3.5 py-1.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-white/10 shadow-sm transition-colors">
+            Reset Log
+          </button>
+          <div class="text-xs font-mono font-bold text-brand-700 dark:text-brand-400 px-3 py-1.5 rounded-xl bg-brand-50 dark:bg-slate-800 border border-brand-200 dark:border-brand-500/30">
+            3 RECORDS ARCHIVED
+          </div>
+        </div>
+      </div>
+
+      <!-- History Table / Compact Physical Record Cards -->
+      <div class="mt-6 space-y-3" id="history-records-list">
+        
+        <!-- Record 1 (High Risk) -->
+        <div class="hardware-bezel rounded-2xl p-4 sm:p-5 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-modern-card border-l-4 border-l-danger-500">
+          <div class="flex items-start sm:items-center gap-4">
+            <div class="w-10 h-10 rounded-xl bg-danger-50 dark:bg-danger-950/80 border border-danger-200 dark:border-danger-800/40 flex items-center justify-center text-danger-600 dark:text-danger-500 font-mono font-extrabold text-sm shadow-sm flex-shrink-0">
+              90
+            </div>
+            <div>
+              <div class="flex items-center gap-2.5 flex-wrap">
+                <span class="text-base font-bold font-mono text-slate-900 dark:text-white">₹45,000</span>
+                <span class="text-xs text-slate-300">·</span>
+                <span class="font-mono text-xs text-slate-700 dark:text-slate-200 font-semibold">unknown@upi</span>
+                <span class="text-[9px] font-mono font-bold px-2 py-0.5 rounded bg-danger-100 text-danger-700 border border-danger-200 dark:bg-danger-950 dark:text-danger-400 dark:border-danger-800/40">HIGH RISK</span>
+              </div>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                Triggered: Urgency phrasing (“account blocked”), URL verification spoof, high ticket amount.
+              </p>
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between md:justify-end gap-5 text-xs font-mono border-t md:border-t-0 pt-2 md:pt-0 border-slate-100 dark:border-white/5">
+            <div class="text-left md:text-right">
+              <span class="text-[10px] text-slate-400 block font-medium">EVALUATED AT</span>
+              <span class="text-slate-700 dark:text-slate-300 font-medium">Today · 08:56 AM</span>
+            </div>
+            <div class="text-left md:text-right">
+              <span class="text-[10px] text-slate-400 block font-medium">FINAL ACTION</span>
+              <span class="text-danger-600 dark:text-danger-400 font-bold">PAYMENT CANCELLED</span>
+            </div>
+            <button onclick="loadScenario('high'); switchTab('check');" class="px-3 py-1.5 rounded-lg bg-slate-50 hover:bg-slate-100 dark:bg-slate-800 text-brand-600 dark:text-brand-400 font-semibold text-xs border border-slate-200 dark:border-white/10 transition-colors">
+              Inspect
+            </button>
+          </div>
+        </div>
+
+        <!-- Record 2 (Review / Medium) -->
+        <div class="hardware-bezel rounded-2xl p-4 sm:p-5 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-modern-card border-l-4 border-l-amber-500">
+          <div class="flex items-start sm:items-center gap-4">
+            <div class="w-10 h-10 rounded-xl bg-amber-50 dark:bg-amber-950/80 border border-amber-200 dark:border-amber-800/40 flex items-center justify-center text-amber-600 dark:text-amber-400 font-mono font-extrabold text-sm shadow-sm flex-shrink-0">
+              58
+            </div>
+            <div>
+              <div class="flex items-center gap-2.5 flex-wrap">
+                <span class="text-base font-bold font-mono text-slate-900 dark:text-white">₹8,000</span>
+                <span class="text-xs text-slate-300">·</span>
+                <span class="font-mono text-xs text-slate-700 dark:text-slate-200 font-semibold">shop@upi</span>
+                <span class="text-[9px] font-mono font-bold px-2 py-0.5 rounded bg-amber-100 text-amber-800 border border-amber-200 dark:bg-amber-950 dark:text-amber-300 dark:border-amber-800/40">REVIEW</span>
+              </div>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                Triggered: First-time merchant handle, atypical transaction volume, unlinked invoice id.
+              </p>
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between md:justify-end gap-5 text-xs font-mono border-t md:border-t-0 pt-2 md:pt-0 border-slate-100 dark:border-white/5">
+            <div class="text-left md:text-right">
+              <span class="text-[10px] text-slate-400 block font-medium">EVALUATED AT</span>
+              <span class="text-slate-700 dark:text-slate-300 font-medium">Today · 09:18 AM</span>
+            </div>
+            <div class="text-left md:text-right">
+              <span class="text-[10px] text-slate-400 block font-medium">FINAL ACTION</span>
+              <span class="text-amber-600 dark:text-amber-400 font-bold">VERIFIED & SENT</span>
+            </div>
+            <button onclick="loadScenario('review'); switchTab('check');" class="px-3 py-1.5 rounded-lg bg-slate-50 hover:bg-slate-100 dark:bg-slate-800 text-brand-600 dark:text-brand-400 font-semibold text-xs border border-slate-200 dark:border-white/10 transition-colors">
+              Inspect
+            </button>
+          </div>
+        </div>
+
+        <!-- Record 3 (Low Risk / Safe) -->
+        <div class="hardware-bezel rounded-2xl p-4 sm:p-5 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-modern-card border-l-4 border-l-brand-500">
+          <div class="flex items-start sm:items-center gap-4">
+            <div class="w-10 h-10 rounded-xl bg-brand-50 dark:bg-emerald-950/80 border border-brand-200 dark:border-emerald-800/40 flex items-center justify-center text-brand-600 dark:text-emerald-400 font-mono font-extrabold text-sm shadow-sm flex-shrink-0">
+              08
+            </div>
+            <div>
+              <div class="flex items-center gap-2.5 flex-wrap">
+                <span class="text-base font-bold font-mono text-slate-900 dark:text-white">₹500</span>
+                <span class="text-xs text-slate-300">·</span>
+                <span class="font-mono text-xs text-slate-700 dark:text-slate-200 font-semibold">arun@upi</span>
+                <span class="text-[9px] font-mono font-bold px-2 py-0.5 rounded bg-brand-100 text-brand-800 border border-brand-200 dark:bg-emerald-950 dark:text-emerald-300 dark:border-emerald-800/40">LOW RISK</span>
+              </div>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                Consistent peer transfer. Known recipient handle history, normal hour, no linguistic coercion.
+              </p>
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between md:justify-end gap-5 text-xs font-mono border-t md:border-t-0 pt-2 md:pt-0 border-slate-100 dark:border-white/5">
+            <div class="text-left md:text-right">
+              <span class="text-[10px] text-slate-400 block font-medium">EVALUATED AT</span>
+              <span class="text-slate-700 dark:text-slate-300 font-medium">Today · 10:42 AM</span>
+            </div>
+            <div class="text-left md:text-right">
+              <span class="text-[10px] text-slate-400 block font-medium">FINAL ACTION</span>
+              <span class="text-brand-600 dark:text-brand-400 font-bold">APPROVED</span>
+            </div>
+            <button onclick="loadScenario('safe'); switchTab('check');" class="px-3 py-1.5 rounded-lg bg-slate-50 hover:bg-slate-100 dark:bg-slate-800 text-brand-600 dark:text-brand-400 font-semibold text-xs border border-slate-200 dark:border-white/10 transition-colors">
+              Inspect
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- TAB 4: HOW SENTRA WORKS (FOUR-STAGE ARCHITECTURE) -->
+    <section id="view-how-it-works" class="view-panel hidden transition-flow">
+      
+      <div class="max-w-3xl pb-6 border-b border-slate-200 dark:border-white/10">
+        <div class="flex items-center gap-2 mb-1.5">
+          <span class="text-[10px] font-mono uppercase tracking-wider font-bold text-brand-700 dark:text-brand-300 px-2.5 py-0.5 rounded-md bg-brand-50 dark:bg-brand-950 border border-brand-200 dark:border-brand-800/40">OPERATING PHILOSOPHY</span>
+        </div>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">How Sentra Works</h2>
+        <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-1">
+          A four-stage contextual defense system designed to intercept cognitive deception before funds move.
+        </p>
+      </div>
+
+      <!-- Connected Physical Modules -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mt-8 relative">
+        
+        <!-- Module 01: DETECT -->
+        <div class="hardware-bezel rounded-2xl p-6 shadow-modern-card flex flex-col justify-between border-t-4 border-t-brand-500 relative transition-all hover:shadow-modern-card-raised">
+          <div class="space-y-3">
+            <div class="flex justify-between items-center">
+              <span class="text-2xl font-mono font-extrabold text-brand-600 dark:text-brand-400">01</span>
+              <span class="text-[10px] font-mono text-slate-500 px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 font-semibold">INGESTION</span>
+            </div>
+            <h3 class="text-lg font-bold text-slate-900 dark:text-white tracking-tight">DETECT</h3>
+            <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+              Analyzes raw pre-payment contextual signals: transaction volume relative to history, handle novelty, coercive psychological triggers, and unverified verification links.
+            </p>
+          </div>
+          <div class="mt-6 pt-4 border-t border-slate-100 dark:border-white/5 text-[11px] font-mono text-slate-500 dark:text-slate-400 leading-relaxed">
+            • VPA Age & Novelty<br>
+            • Pressure Pattern Lexicon<br>
+            • URL Domain Entropy
+          </div>
+        </div>
+
+        <!-- Module 02: EXPLAIN -->
+        <div class="hardware-bezel rounded-2xl p-6 shadow-modern-card flex flex-col justify-between border-t-4 border-t-brand-500 relative transition-all hover:shadow-modern-card-raised">
+          <div class="space-y-3">
+            <div class="flex justify-between items-center">
+              <span class="text-2xl font-mono font-extrabold text-brand-600 dark:text-brand-400">02</span>
+              <span class="text-[10px] font-mono text-slate-500 px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 font-semibold">TRANSPARENCY</span>
+            </div>
+            <h3 class="text-lg font-bold text-slate-900 dark:text-white tracking-tight">EXPLAIN</h3>
+            <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+              Eliminates the black-box effect. Breaks the compound score down into auditable contributing points (+25 Urgency, +20 Amount, +20 URL) so the user comprehends the exact vulnerability.
+            </p>
+          </div>
+          <div class="mt-6 pt-4 border-t border-slate-100 dark:border-white/5 text-[11px] font-mono text-slate-500 dark:text-slate-400 leading-relaxed">
+            • Additive Points Audit<br>
+            • Plain-Language Evidence<br>
+            • Context Discrepancy Note
+          </div>
+        </div>
+
+        <!-- Module 03: PROTECT -->
+        <div class="hardware-bezel rounded-2xl p-6 shadow-modern-card flex flex-col justify-between border-t-4 border-t-brand-500 relative transition-all hover:shadow-modern-card-raised">
+          <div class="space-y-3">
+            <div class="flex justify-between items-center">
+              <span class="text-2xl font-mono font-extrabold text-brand-600 dark:text-brand-400">03</span>
+              <span class="text-[10px] font-mono text-slate-500 px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 font-semibold">INTERVENTION</span>
+            </div>
+            <h3 class="text-lg font-bold text-slate-900 dark:text-white tracking-tight">PROTECT</h3>
+            <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+              Injects a tactile Liquid Glass circuit-breaker into the transaction sequence. Breaks the fraudster's psychological urgency loop before irreversible payment dispatch.
+            </p>
+          </div>
+          <div class="mt-6 pt-4 border-t border-slate-100 dark:border-white/5 text-[11px] font-mono text-slate-500 dark:text-slate-400 leading-relaxed">
+            • Tactile Circuit Breaker<br>
+            • Out-of-band Verification<br>
+            • De-escalation Delay
+          </div>
+        </div>
+
+        <!-- Module 04: DECIDE -->
+        <div class="hardware-bezel rounded-2xl p-6 shadow-modern-card flex flex-col justify-between border-t-4 border-t-brand-500 relative transition-all hover:shadow-modern-card-raised">
+          <div class="space-y-3">
+            <div class="flex justify-between items-center">
+              <span class="text-2xl font-mono font-extrabold text-brand-600 dark:text-brand-400">04</span>
+              <span class="text-[10px] font-mono text-slate-500 px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 font-semibold">SOVEREIGNTY</span>
+            </div>
+            <h3 class="text-lg font-bold text-slate-900 dark:text-white tracking-tight">DECIDE</h3>
+            <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+              Empowers the user with sovereign decision-making. Sentra does not take custody of funds, freeze bank accounts, or block users against their informed will.
+            </p>
+          </div>
+          <div class="mt-6 pt-4 border-t border-slate-100 dark:border-white/5 text-[11px] font-mono text-slate-500 dark:text-slate-400 leading-relaxed">
+            • User Autonomy Preserved<br>
+            • Verified Proceed Override<br>
+            • Zero Asset Custody
+          </div>
+        </div>
+
+      </div>
+
+      <!-- DEDICATED PRIVACY SECTION: "Protection Without Surveillance" -->
+      <div class="mt-12 hardware-bezel rounded-3xl p-6 sm:p-10 shadow-modern-card-raised border border-slate-200 dark:border-white/10">
+        <div class="max-w-3xl">
+          <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-50 dark:bg-brand-950 text-[11px] font-mono font-bold text-brand-700 dark:text-brand-400 mb-4 border border-brand-200 dark:border-brand-500/20">
+            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+            </svg>
+            PRIVACY BY HARDWARE DESIGN
+          </div>
+          <h3 class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+            Protection without surveillance.
+          </h3>
+          <p class="text-sm text-slate-600 dark:text-slate-300 mt-2 font-normal leading-relaxed">
+            The core philosophy of Sentra is: <strong class="text-brand-600 dark:text-brand-400 font-semibold">“Make the risk visible, not the user exposed.”</strong>
+          </p>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-8">
+            <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-white/5 space-y-1.5 shadow-sm">
+              <div class="flex items-center gap-2 text-slate-900 dark:text-white font-mono text-xs font-bold">
+                <span class="w-2 h-2 rounded-full bg-brand-500"></span>
+                NO BANKING PASSWORDS
+              </div>
+              <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                Sentra never asks for or stores internet banking passwords, CVVs, or debit/credit card numbers.
+              </p>
+            </div>
+
+            <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-white/5 space-y-1.5 shadow-sm">
+              <div class="flex items-center gap-2 text-slate-900 dark:text-white font-mono text-xs font-bold">
+                <span class="w-2 h-2 rounded-full bg-brand-500"></span>
+                NO UPI PIN EXPOSURE
+              </div>
+              <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                Your UPI PIN is entered exclusively on NPCI-certified terminal screens. Sentra has no keyboard hook or access to PIN inputs.
+              </p>
+            </div>
+
+            <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-white/5 space-y-1.5 shadow-sm">
+              <div class="flex items-center gap-2 text-slate-900 dark:text-white font-mono text-xs font-bold">
+                <span class="w-2 h-2 rounded-full bg-brand-500"></span>
+                VOLUNTARY CONTEXT ONLY
+              </div>
+              <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                Only the non-sensitive metadata (amount, recipient handle, notes) provided during inspection is evaluated.
+              </p>
+            </div>
+
+            <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-white/5 space-y-1.5 shadow-sm">
+              <div class="flex items-center gap-2 text-slate-900 dark:text-white font-mono text-xs font-bold">
+                <span class="w-2 h-2 rounded-full bg-brand-500"></span>
+                NO HIDDEN DECISION MAKING
+              </div>
+              <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                Every calculation is fully inspectable on-screen, preventing arbitrary AI hallucination or silent fund refusal.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Clear Product Boundaries / Disclaimer -->
+      <div class="mt-8 p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 text-xs text-slate-500 dark:text-slate-400 leading-relaxed font-mono shadow-sm">
+        <span class="text-slate-800 dark:text-slate-200 font-bold uppercase tracking-wider block mb-1">Architecture Note:</span>
+        SENTRA is an explainable pre-payment fraud detection and protection layer. It is NOT a bank, UPI payment app, escrow agent, or financial custodian. This prototype is engineered with modular decoupled logic ready to interface with banking APIs and browser security extensions.
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="mt-20 border-t border-slate-200 dark:border-white/5 py-10 px-4 max-w-7xl mx-auto text-slate-500 dark:text-slate-400 text-xs font-mono">
+    <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+      <div class="flex items-center gap-3">
+        <div class="w-6 h-6 rounded-lg bg-brand-600 flex items-center justify-center text-white text-xs font-bold shadow-sm">
+          S
+        </div>
+        <span class="text-slate-800 dark:text-slate-200 font-bold tracking-wide">SENTRA CYBERSECURITY</span>
+        <span class="text-slate-300 dark:text-slate-700">|</span>
+        <span class="text-slate-500 dark:text-slate-400 text-[11px]">“See the risk before you send.”</span>
+      </div>
+
+      <div class="flex items-center gap-6 font-medium">
+        <button onclick="switchTab('check')" class="hover:text-brand-600 dark:hover:text-brand-400 transition-colors">Check Payment</button>
+        <button onclick="switchTab('history')" class="hover:text-brand-600 dark:hover:text-brand-400 transition-colors">Audit Register</button>
+        <button onclick="switchTab('how-it-works')" class="hover:text-brand-600 dark:hover:text-brand-400 transition-colors">Philosophy</button>
+        <span class="text-brand-700 dark:text-brand-400 bg-brand-50 dark:bg-brand-950 px-2.5 py-0.5 rounded-md border border-brand-200 dark:border-brand-800/40 font-bold">PROTOTYPE V3.8</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==================== FRONTEND APPLICATION LOGIC ==================== -->
+  <script>
+    // PREDEFINED SCENARIO DEFINITIONS
+    const SCENARIOS = {
+      safe: {
+        id: 'safe',
+        amount: '500',
+        recipient: 'arun@upi',
+        badge: 'KNOWN RECIPIENT',
+        badgeClass: 'bg-brand-100 text-brand-800 border-brand-200 dark:bg-brand-950 dark:text-brand-300 dark:border-brand-800/40',
+        message: 'Dinner split from yesterday at the cafe.',
+        link: '',
+        score: 8,
+        level: 'LOW RISK',
+        levelClass: 'bg-brand-100 text-brand-800 border-brand-200 dark:bg-brand-950 dark:text-brand-400 dark:border-brand-800/40',
+        gaugeStroke: '#10B981',
+        gaugeOffset: 277, // approx 8% fill of 301.59
+        headline: 'Payment context appears consistent',
+        subtext: 'Recipient handle is established with frequent safe peer interactions. Amount and language align with peer transfers.',
+        signals: [
+          {
+            title: 'ESTABLISHED RECIPIENT',
+            points: '+0',
+            desc: 'arun@upi has a positive transaction track record in your ecosystem.',
+            type: 'safe'
+          },
+          {
+            title: 'AMOUNT WITHIN NORMAL PATTERN',
+            points: '+3',
+            desc: '₹500 conforms to routine peer payments with no atypical volume spikes.',
+            type: 'safe'
+          },
+          {
+            title: 'NO COERCIVE LANGUAGE',
+            points: '+5',
+            desc: 'Note text is colloquial and free of urgency or bank penalty triggers.',
+            type: 'safe'
+          }
+        ]
+      },
+      review: {
+        id: 'review',
+        amount: '8,000',
+        recipient: 'shop@upi',
+        badge: 'NEW RECIPIENT',
+        badgeClass: 'bg-amber-100 text-amber-800 border-amber-200 dark:bg-amber-950 dark:text-amber-300 dark:border-amber-800/40',
+        message: 'Order #4829 confirmation. Please pay to release inventory hold.',
+        link: 'http://order-status-update.biz',
+        score: 58,
+        level: 'REVIEW',
+        levelClass: 'bg-amber-100 text-amber-800 border-amber-200 dark:bg-amber-950 dark:text-amber-400 dark:border-amber-800/40',
+        gaugeStroke: '#F59E0B',
+        gaugeOffset: 126, // approx 58% fill of 301.59
+        headline: 'Caution advised: Unverified commercial recipient',
+        subtext: 'First-time recipient with commercial payment request and unverified external status link. Exercise moderate care.',
+        signals: [
+          {
+            title: 'NEW MERCHANT RECIPIENT',
+            points: '+25',
+            desc: 'First transaction with this merchant handle. No historical peer affinity.',
+            type: 'amber'
+          },
+          {
+            title: 'UNVERIFIED INVOICE URL',
+            points: '+18',
+            desc: 'Link domain was registered recently and does not match certified payment gateways.',
+            type: 'amber'
+          },
+          {
+            title: 'MODERATE TRANSACTION TICKET',
+            points: '+15',
+            desc: '₹8,000 is higher than 84% of typical initial transfers to new handles.',
+            type: 'amber'
+          }
+        ]
+      },
+      high: {
+        id: 'high',
+        amount: '45,000',
+        recipient: 'unknown@upi',
+        badge: 'NEW RECIPIENT',
+        badgeClass: 'bg-danger-100 text-danger-700 border-danger-200 dark:bg-danger-950 dark:text-danger-300 dark:border-danger-800/40',
+        message: 'URGENT! Your bank account will be blocked. Verify your account by making this payment immediately.',
+        link: 'http://secure-account-verification.example',
+        score: 90,
+        level: 'HIGH RISK',
+        levelClass: 'bg-danger-100 text-danger-700 border-danger-200 dark:bg-danger-950 dark:text-danger-500 dark:border-danger-800/40',
+        gaugeStroke: '#EF4444',
+        gaugeOffset: 30, // 90% fill of 301.59
+        headline: 'Multiple suspicious signals detected',
+        subtext: 'Coercive urgency terminology, unverified recipient handle, and deceptive verification URL combined to trigger critical checkpoint.',
+        signals: [
+          {
+            title: 'URGENCY & COERCION LANGUAGE',
+            points: '+25',
+            desc: 'Message pressures you to act immediately using account-blocking and fear language.',
+            type: 'danger'
+          },
+          {
+            title: 'HIGH TRANSACTION AMOUNT',
+            points: '+20',
+            desc: '₹45,000 is significantly higher than a typical payment pattern for this category.',
+            type: 'danger'
+          },
+          {
+            title: 'SUSPICIOUS SPOOFED URL',
+            points: '+20',
+            desc: 'The link uses account-verification phrasing completely inconsistent with normal payment flows.',
+            type: 'danger'
+          },
+          {
+            title: 'UNESTABLISHED RECIPIENT',
+            points: '+15',
+            desc: 'This recipient has not been previously trusted or verified in your ecosystem.',
+            type: 'danger'
+          },
+          {
+            title: 'CONTEXT MISMATCH',
+            points: '+10',
+            desc: 'The payment request demands money to “verify” an account — a known scam tactic.',
+            type: 'danger'
+          }
+        ]
+      }
+    };
+
+    let currentScenario = SCENARIOS.high;
+
+    // THEME TOGGLE
+    function toggleTheme() {
+      const html = document.documentElement;
+      const sunIcon = document.getElementById('theme-sun-icon');
+      const moonIcon = document.getElementById('theme-moon-icon');
+      
+      if (html.classList.contains('dark')) {
+        html.classList.remove('dark');
+        html.classList.add('light');
+        sunIcon.classList.add('hidden');
+        moonIcon.classList.remove('hidden');
+        localStorage.setItem('sentra_theme', 'light');
+      } else {
+        html.classList.remove('light');
+        html.classList.add('dark');
+        moonIcon.classList.add('hidden');
+        sunIcon.classList.remove('hidden');
+        localStorage.setItem('sentra_theme', 'dark');
+      }
+    }
+
+    // TAB NAVIGATION
+    function switchTab(tabId) {
+      // Hide all panels
+      document.querySelectorAll('.view-panel').forEach(panel => {
+        panel.classList.add('hidden');
+      });
+
+      // Show selected panel
+      const target = document.getElementById('view-' + tabId);
+      if (target) {
+        target.classList.remove('hidden');
+      }
+
+      // Update Nav Link styling
+      document.querySelectorAll('.nav-tab').forEach(btn => {
+        btn.className = "nav-tab px-3.5 py-1.5 rounded-lg text-xs font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-white/60 dark:hover:bg-white/5 transition-all";
+      });
+
+      const activeBtn = document.getElementById('nav-btn-' + tabId);
+      if (activeBtn) {
+        activeBtn.className = "nav-tab px-3.5 py-1.5 rounded-lg text-xs font-bold text-slate-900 dark:text-white bg-white dark:bg-slate-800 shadow-sm border border-slate-200/90 dark:border-white/10 transition-all";
+      }
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // SCENARIO LOADING
+    function loadScenario(type) {
+      const data = SCENARIOS[type];
+      if (!data) return;
+      currentScenario = data;
+
+      // Update button toggle states
+      ['safe', 'review', 'high'].forEach(key => {
+        const btn = document.getElementById('btn-scen-' + key);
+        if (btn) {
+          if (key === type) {
+            btn.className = "px-3.5 py-1.5 rounded-lg text-xs font-mono font-bold text-slate-900 dark:text-white bg-white dark:bg-slate-800 shadow-sm border border-slate-200/90 dark:border-white/10 transition-all";
+          } else {
+            btn.className = "px-3.5 py-1.5 rounded-lg text-xs font-mono font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all";
+          }
+        }
+      });
+
+      // Fill Input Form Fields
+      document.getElementById('input-amount').value = data.amount;
+      document.getElementById('input-recipient').value = data.recipient;
+      document.getElementById('input-message').value = data.message;
+      document.getElementById('input-link').value = data.link;
+
+      // Recipient badge
+      const badge = document.getElementById('badge-recipient');
+      badge.textContent = data.badge;
+      badge.className = `text-[9px] font-mono font-bold px-2 py-0.5 rounded border ${data.badgeClass}`;
+
+      // Automatically render the result
+      renderRiskResult(data);
+    }
+
+    // RENDER RISK ASSESSMENT VIEW
+    function renderRiskResult(data) {
+      // Score and metrics
+      const scoreNum = document.getElementById('display-score-num');
+      scoreNum.textContent = data.score;
+
+      const scoreBadge = document.getElementById('display-score-badge');
+      scoreBadge.textContent = data.level;
+      scoreBadge.className = `text-[9px] font-mono font-bold px-1.5 py-0.5 rounded border mt-1 ${data.levelClass}`;
+
+      const levelPill = document.getElementById('display-level-pill');
+      levelPill.textContent = data.level;
+      levelPill.className = `text-xs font-mono font-bold px-2.5 py-1 rounded-md border ${data.levelClass}`;
+
+      document.getElementById('display-risk-headline').textContent = data.headline;
+      document.getElementById('display-risk-subtext').textContent = data.subtext;
+
+      // Quick summary pills
+      document.getElementById('display-payload-amount').textContent = '₹' + data.amount;
+      document.getElementById('display-payload-vpa').textContent = data.recipient;
+      
+      const gateState = document.getElementById('display-payload-gate');
+      if (data.score >= 70) {
+        gateState.textContent = 'ENGAGED';
+        gateState.className = 'text-danger-600 dark:text-danger-400 font-bold';
+      } else if (data.score >= 40) {
+        gateState.textContent = 'CAUTION';
+        gateState.className = 'text-amber-600 dark:text-amber-400 font-bold';
+      } else {
+        gateState.textContent = 'CLEARED';
+        gateState.className = 'text-brand-600 dark:text-brand-400 font-bold';
+      }
+
+      // Gauge SVG circle update
+      const gauge = document.getElementById('gauge-circle');
+      gauge.setAttribute('stroke', data.gaugeStroke);
+      gauge.style.strokeDashoffset = data.gaugeOffset;
+
+      // Render individual signal cards
+      const container = document.getElementById('signals-container');
+      container.innerHTML = '';
+
+      data.signals.forEach((sig, index) => {
+        let badgeColor = 'bg-brand-100 text-brand-800 border-brand-200 dark:bg-brand-950 dark:text-brand-400 dark:border-brand-800/40';
+        let barColor = 'border-l-brand-500';
+
+        if (sig.type === 'danger') {
+          badgeColor = 'bg-danger-100 text-danger-700 border-danger-200 dark:bg-danger-950 dark:text-danger-400 dark:border-danger-800/40';
+          barColor = 'border-l-danger-500';
+        } else if (sig.type === 'amber') {
+          badgeColor = 'bg-amber-100 text-amber-800 border-amber-200 dark:bg-amber-950 dark:text-amber-400 dark:border-amber-800/40';
+          barColor = 'border-l-amber-500';
+        }
+
+        const card = document.createElement('div');
+        card.className = `p-3.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 border-l-4 ${barColor} shadow-sm transition-all duration-300 transform opacity-0 translate-y-2`;
+        card.innerHTML = `
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-mono font-bold text-slate-900 dark:text-white tracking-wide">${sig.title}</span>
+            <span class="text-xs font-mono font-bold px-2 py-0.5 rounded border ${badgeColor}">${sig.points}</span>
+          </div>
+          <p class="text-xs text-slate-600 dark:text-slate-300 font-sans mt-1.5 leading-relaxed">${sig.desc}</p>
+        `;
+        container.appendChild(card);
+
+        // Staggered physical card entry animation
+        setTimeout(() => {
+          card.classList.remove('opacity-0', 'translate-y-2');
+        }, 60 * index);
+      });
+
+      // Protection gate card state
+      const gateCard = document.getElementById('protection-gate-card');
+      const gateAmountRecipient = document.getElementById('gate-amount-recipient');
+      gateAmountRecipient.textContent = `₹${data.amount} · ${data.recipient}`;
+
+      if (data.score >= 70) {
+        gateCard.classList.remove('hidden');
+        gateCard.className = "rounded-2xl p-5 border border-danger-200 dark:border-danger-500/40 bg-danger-50/70 dark:bg-danger-950/40 shadow-sm space-y-4";
+      } else if (data.score >= 40) {
+        gateCard.classList.remove('hidden');
+        gateCard.className = "rounded-2xl p-5 border border-amber-200 dark:border-amber-500/40 bg-amber-50/70 dark:bg-amber-950/40 shadow-sm space-y-4";
+      } else {
+        gateCard.className = "rounded-2xl p-5 border border-brand-200 dark:border-brand-500/30 bg-brand-50/50 dark:bg-brand-950/30 shadow-sm space-y-3";
+      }
+
+      document.getElementById('result-timestamp').textContent = 'EVALUATED AT ' + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    }
+
+    // MULTI-STEP ANALYSIS INSTRUMENT
+    let isAnalyzing = false;
+    function startAnalysis() {
+      if (isAnalyzing) return;
+      isAnalyzing = true;
+
+      const progressPanel = document.getElementById('analysis-progress-panel');
+      const resultPanel = document.getElementById('risk-result-panel');
+      const btn = document.getElementById('btn-analyze');
+      const btnText = document.getElementById('btn-analyze-text');
+      const progressBar = document.getElementById('analysis-progress-bar');
+
+      // UI state
+      progressPanel.classList.remove('hidden');
+      resultPanel.classList.add('opacity-40', 'pointer-events-none');
+      btnText.textContent = "PROCESSING TELEMETRY...";
+      btn.classList.add('opacity-75');
+
+      // Reset step styles
+      for (let i = 1; i <= 5; i++) {
+        const stepEl = document.getElementById('step-' + i);
+        const icon = stepEl.querySelector('.step-icon');
+        const status = stepEl.querySelector('.step-status');
+        stepEl.className = "flex items-center justify-between p-2.5 rounded-lg bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-white/5 text-slate-500 dark:text-slate-400";
+        icon.className = "step-icon w-4 h-4 rounded-full border border-slate-400 flex items-center justify-center text-[9px] font-bold";
+        status.textContent = "QUEUED";
+        status.className = "step-status text-[11px] text-slate-400 font-semibold";
+      }
+      progressBar.style.width = "5%";
+
+      const steps = [
+        { id: 1, label: "ANALYZING CONTEXT", pct: "25%" },
+        { id: 2, label: "INSPECTING HANDLE", pct: "50%" },
+        { id: 3, label: "PARSING LANGUAGE", pct: "75%" },
+        { id: 4, label: "PROBING URL", pct: "90%" },
+        { id: 5, label: "SYNTHESIZING MATRIX", pct: "100%" }
+      ];
+
+      steps.forEach((step, idx) => {
+        setTimeout(() => {
+          const stepEl = document.getElementById('step-' + step.id);
+          const icon = stepEl.querySelector('.step-icon');
+          const status = stepEl.querySelector('.step-status');
+
+          stepEl.className = "flex items-center justify-between p-2.5 rounded-lg bg-brand-50/80 dark:bg-slate-850 border border-brand-300 dark:border-brand-500/40 text-slate-900 dark:text-white";
+          icon.className = "step-icon w-4 h-4 rounded-full bg-brand-500 text-white font-bold flex items-center justify-center text-[9px]";
+          status.textContent = "CHECKED";
+          status.className = "step-status text-[11px] text-brand-600 dark:text-brand-400 font-bold";
+
+          progressBar.style.width = step.pct;
+          document.getElementById('analysis-step-timer').textContent = step.label;
+        }, (idx + 1) * 320);
+      });
+
+      // Completion
+      setTimeout(() => {
+        isAnalyzing = false;
+        progressPanel.classList.add('hidden');
+        resultPanel.classList.remove('opacity-40', 'pointer-events-none');
+        btnText.textContent = "ANALYZE PAYMENT";
+        btn.classList.remove('opacity-75');
+
+        // Check input field values to determine matching scenario
+        const amt = document.getElementById('input-amount').value.replace(/,/g, '').trim();
+        if (Number(amt) <= 1000) {
+          renderRiskResult(SCENARIOS.safe);
+        } else if (Number(amt) <= 10000) {
+          renderRiskResult(SCENARIOS.review);
+        } else {
+          renderRiskResult(SCENARIOS.high);
+        }
+
+        // Scroll smoothly to result
+        resultPanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }, 1900);
+    }
+
+    // CHECKPOINT USER ACTIONS
+    function recordCheckpointAction(action) {
+      const msg = action === 'cancelled' 
+        ? "Payment cancelled. Simulated safety checkpoint prevented transaction dispatch." 
+        : "Proceed override acknowledged. Review notice noted in audit register.";
+      
+      const badge = action === 'cancelled' ? 'CANCELLED' : 'OVERRIDDEN';
+      alert(`[SENTRA CHECKPOINT] ${badge}\n\n${msg}\n\nNo money was transferred. Your security audit trail has been recorded.`);
+    }
+
+    function quickTestHighRisk() {
+      loadScenario('high');
+      switchTab('check');
+      startAnalysis();
+    }
+
+    function clearHistoryRecords() {
+      if (confirm("Reset local prototype audit records?")) {
+        document.getElementById('history-records-list').innerHTML = `
+          <div class="p-8 text-center rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-white/5 font-mono text-xs text-slate-500 dark:text-slate-400">
+            Audit register empty. New evaluations will appear here.
+          </div>
+        `;
+      }
+    }
+
+    // Initialize application on default high risk state
+    window.addEventListener('DOMContentLoaded', () => {
+      loadScenario('high');
+    });
+  </script>
+</body>
+</html>
