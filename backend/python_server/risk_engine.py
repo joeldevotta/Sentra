@@ -63,9 +63,22 @@ def analyze_url(link: str) -> tuple[int, list[str]]:
             score += 8
             signals.append("Punycode domain detected")
 
-        if any(term in value for term in SUSPICIOUS_URL_TERMS):
+        # Score suspicious intent in the hostname/path, not just the full URL.
+        if any(term in host for term in SUSPICIOUS_URL_TERMS):
+            score += 12
+            signals.append("Suspicious payment domain")
+        elif any(term in value for term in SUSPICIOUS_URL_TERMS):
             score += 8
             signals.append("Sensitive-action URL")
+
+        # Common phishing-style domain construction signals.
+        if host.count("-") >= 2:
+            score += 5
+            signals.append("Unusual domain structure")
+
+        if parsed.port is not None and parsed.port not in {80, 443}:
+            score += 5
+            signals.append("Non-standard URL port")
 
     except ValueError:
         score += 10
@@ -94,6 +107,14 @@ def analyze_payment(amount: float, recipient: str, message: str, link: str):
         score += 15
         signals.append("Unfamiliar recipient")
 
+    # Prototype impersonation signal for payment-related display names.
+    if any(term in recipient_text for term in [
+        "customer care", "customer-care", "support", "helpdesk",
+        "verification", "kyc", "refund", "official"
+    ]):
+        score += 15
+        signals.append("Payment-related or impersonation-style recipient")
+
     # Message categories are capped so repeated words cannot inflate the score.
     if _contains_any(text, URGENCY_TERMS):
         score += 20
@@ -111,10 +132,20 @@ def analyze_payment(amount: float, recipient: str, message: str, link: str):
     score += url_score
     signals.extend(url_signals)
 
-    # Cross-signal correlation: urgency + credential request is especially suspicious.
+    # Cross-signal correlation: combinations are more suspicious than isolated signals.
     if _contains_any(text, URGENCY_TERMS) and _contains_any(text, CREDENTIAL_TERMS):
         score += 10
         signals.append("Urgency combined with credential request")
+
+    if link.strip() and url_score >= 12 and any(
+        word in recipient_text for word in ["unknown", "new recipient", "unverified", "support", "official", "refund", "kyc"]
+    ):
+        score += 15
+        signals.append("Suspicious link combined with recipient risk")
+
+    if link.strip() and url_score >= 12 and _contains_any(text, URGENCY_TERMS):
+        score += 10
+        signals.append("Suspicious link combined with urgency")
 
     # Keep the score bounded and deterministic.
     score = min(score, 100)
